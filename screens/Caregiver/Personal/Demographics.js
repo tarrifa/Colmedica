@@ -1,33 +1,49 @@
 import { StyleSheet, View, KeyboardAvoidingView } from "react-native";
 import React, { useState } from "react";
 import { Input, Button, Text } from "@rneui/themed";
-import { Dropdown } from 'react-native-element-dropdown';
-import { Icon, ListItem, Switch } from "@rneui/base";
+import { Dropdown } from "react-native-element-dropdown";
+import { Switch } from "@rneui/base";
 import { StatusBar } from "expo-status-bar";
-
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import { db, auth, doc, setDoc, } from "../../../firebase";
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 const data = [
-  { label: 'Item 1', value: '1' },
-  { label: 'Item 2', value: '2' },
-  { label: 'Item 3', value: '3' },
-  { label: 'Item 4', value: '4' },
-  { label: 'Item 5', value: '5' },
-  { label: 'Item 6', value: '6' },
-  { label: 'Item 7', value: '7' },
-  { label: 'Item 8', value: '8' },
+  { label: "Item 1", value: "1" },
+  { label: "Item 2", value: "2" },
+  { label: "Item 3", value: "3" },
+  { label: "Item 4", value: "4" },
+  { label: "Item 5", value: "5" },
+  { label: "Item 6", value: "6" },
+  { label: "Item 7", value: "7" },
+  { label: "Item 8", value: "8" },
 ];
 
 const Demographics = ({ navigation }) => {
   const [numDoc, setNumDoc] = useState("");
   const [cellphone, setCellphone] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [phone, setPhone] = useState("");
   const [cuidador, setCuidador] = useState(false);
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  
+  const toggleSwitch = () => {
+    setCuidador(!cuidador);
+  };
 
+  const addDemographics = () => {
+    console.log(auth.currentUser)
+      const usersRef = doc(db, `users/${auth.currentUser.uid}` );
+      const addData = {
+        numDoc: numDoc,
+        cellphone: cellphone,
+        phone: phone,
+        docType: value,
+        cuidador: cuidador,
+        userId: currentUser.uid,
+      };
+      
+      setDoc(usersRef, addData, { merge: true });
+  };
 
   return (
     <KeyboardAvoidingView behavior="height" style={styles.container}>
@@ -36,7 +52,10 @@ const Demographics = ({ navigation }) => {
         <View style={{ height: 50 }}></View>
 
         <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: "#5CC5BA", color:"#5CC5BA" }]}
+          style={[
+            styles.dropdown,
+            isFocus && { borderColor: "#5CC5BA", color: "#5CC5BA" },
+          ]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
@@ -46,19 +65,19 @@ const Demographics = ({ navigation }) => {
           maxHeight={300}
           labelField="label"
           valueField="value"
-          placeholder={!isFocus ? 'Tipo de Documento' : '...'}
+          placeholder={!isFocus ? "Tipo de Documento" : ""}
           searchPlaceholder="Opciones..."
           value={value}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
-          onChange={item => {
+          onChange={(item) => {
             setValue(item.value);
             setIsFocus(false);
           }}
           renderLeftIcon={() => (
             <AntDesign
               style={styles.icon}
-              color={isFocus ? "#5CC5BA" : 'black'}
+              color={isFocus ? "#5CC5BA" : "#5CC5BA"}
               name="Safety"
               size={20}
             />
@@ -94,28 +113,7 @@ const Demographics = ({ navigation }) => {
           value={phone}
           onChangeText={(text) => setPhone(text)}
         />
-        <Input
-          placeholder="Contraseña"
-          style={styles.input}
-          inputContainerStyle={{
-            borderBottomColor: "#5CC5BA",
-            borderBottomWidth: 2,
-          }}
-          secureTextEntry={true}
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
-        <Input
-          placeholder="Confirmar Contraseña"
-          style={styles.input}
-          inputContainerStyle={{
-            borderBottomColor: "#5CC5BA",
-            borderBottomWidth: 2,
-          }}
-          secureTextEntry={true}
-          value={confirmPassword}
-          onChangeText={(text) => setConfirmPassword(text)}
-        />
+
         <View
           style={{
             justifyContent: "space-around",
@@ -125,6 +123,7 @@ const Demographics = ({ navigation }) => {
           }}
         >
           <Text style={{ color: "grey", fontSize: 15 }}>¿Es Cuidador?</Text>
+          <Switch value={cuidador} onValueChange={() => toggleSwitch()} />
         </View>
       </View>
       <View style={{ alignItems: "center" }}>
@@ -132,15 +131,15 @@ const Demographics = ({ navigation }) => {
           containerStyle={styles.button}
           titleStyle={{ lineHeight: 30, fontSize: 18 }}
           color="#5CC5BA"
-          title="Registrarse"
-          onPress={{}}
+          title="Continúa"
+          onPress={addDemographics}
         />
         <Text>¿Ya tiene cuenta?</Text>
         <Text
           onPress={() => navigation.navigate("Login")}
           style={{ color: "#5CC5BA" }}
         >
-          Ingrese aquí{" "}
+          Ingrese aquí
         </Text>
       </View>
     </KeyboardAvoidingView>
@@ -176,17 +175,19 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 50,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
+    borderColor: "#5CC5BA",
+    marginBottom: 8,
   },
   icon: {
     marginRight: 5,
   },
   label: {
-    position: 'absolute',
-    backgroundColor: 'white',
+    position: "absolute",
+    backgroundColor: "white",
     left: 22,
     top: 8,
     zIndex: 999,
@@ -195,9 +196,12 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 16,
+    color: "grey",
+    textAlign: "center",
   },
   selectedTextStyle: {
     fontSize: 16,
+    borderColor: "#5CC5BA",
   },
   iconStyle: {
     width: 20,

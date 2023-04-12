@@ -17,7 +17,7 @@ const ITEM_HEIGHT = 550;
 const data = [
   {
     key: 1,
-    image: require("../../assets/images/logoSC.png"),
+    image: require("../../assets/images/viejita2.jpeg"),
     title: "Mariela Garavito",
   },
   {

@@ -29,13 +29,14 @@ export default function App() {
         <Stack.Group>
           <Stack.Screen name="Patients" component={Patients} />
           <Stack.Screen name="Navbar" component={Navbar} />
+          <Stack.Screen name="Demographics" component={Demographics} />
   
     
           <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Demographics" component={Demographics} />
           <Stack.Screen name="SignUp" component={SignUp} />
         </Stack.Group>
       {/* )} */}
+      
     </Stack.Navigator>
   </NavigationContainer>
   )
