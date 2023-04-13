@@ -10,25 +10,46 @@ import {
 } from "react-native";
 import React from "react";
 import { Button, Card } from "@rneui/base";
+import { collection, query, where, doc, getDocs } from "firebase/firestore";
+import { db, auth } from "../../../firebase";
 
 const ITEM_WIDTH = Dimensions.get("window").width;
 const ITEM_HEIGHT = 550;
+
+
+const getPatients = async() => {
+  const docRef = collection(db, "patients");
+  const docQuery = query(docRef, where("caregiver", "==", auth.currentUser.uid ));
+  
+  const querySnapshot = await getDocs(docQuery);
+  
+};
+
 
 const data = [
   {
     key: 1,
     image: require("../../assets/images/viejita2.jpeg"),
     title: "Mariela Garavito",
+    age:73,
+    phone: 3123945094,
+    emergency: 3164734659,
   },
   {
     key: 2,
     image: require("../../assets/images/foto.png"),
     title: "Card 2",
+    age:74,
+    phone: 3123945095,
+    emergency: 3164734658,
   },
   {
     key: 3,
     image: require("../../assets/images/foto.png"),
     title: "Card 3",
+    age:75,
+    phone: 3123945096,
+    emergency: 3164734657,
   },
 ];
 
@@ -78,15 +99,15 @@ const Patients = ({navigation}) => {
                 <View style={{flexDirection:"row",justifyContent:"space-between", alignItems:"center"}}>
                   <View style={{alignItems:"center"}}>
                     <Text style={{marginBottom:10, color:"#5CC5BA",fontWeight:"bold"}}>Edad</Text>
-                    <Text>73</Text>
+                    <Text>{item.age}</Text>
                   </View>
                   <View style={{alignItems:"center"}}>
                     <Text style={{marginBottom:10, color:"#5CC5BA",fontWeight:"bold"}}>Celular</Text>
-                    <Text onPress={()=>{Linking.openURL('tel:3123945094');}}>3123945094</Text>
+                    <Text onPress={()=>{Linking.openURL(`tel:${item.phone}`);}}>{item.phone}</Text>
                   </View>
                   <View style={{alignItems:"center"}}>
                     <Text style={{marginBottom:10, color:"#5CC5BA", fontWeight:"bold"}}>Emergencia</Text>
-                    <Text onPress={()=>{Linking.openURL('tel:3164734659');}}>3164734659</Text>
+                    <Text onPress={()=>{Linking.openURL(`tel:${item.emergency}`);}}>{item.emergency}</Text>
                   </View>
                 </View>
                 <Button

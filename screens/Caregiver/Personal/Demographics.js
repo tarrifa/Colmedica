@@ -4,8 +4,9 @@ import { Input, Button, Text } from "@rneui/themed";
 import { Dropdown } from "react-native-element-dropdown";
 import { Switch } from "@rneui/base";
 import { StatusBar } from "expo-status-bar";
-import { db, auth, doc, setDoc, } from "../../../firebase";
+import { db, auth } from "../../../firebase";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import {  doc, setDoc } from "firebase/firestore";
 
 const data = [
   { label: "Item 1", value: "1" },
@@ -31,7 +32,7 @@ const Demographics = ({ navigation }) => {
   };
 
   const addDemographics = () => {
-    console.log(auth.currentUser)
+
       const usersRef = doc(db, `users/${auth.currentUser.uid}` );
       const addData = {
         numDoc: numDoc,
@@ -39,10 +40,10 @@ const Demographics = ({ navigation }) => {
         phone: phone,
         docType: value,
         cuidador: cuidador,
-        userId: currentUser.uid,
       };
       
       setDoc(usersRef, addData, { merge: true });
+      navigation.navigate("Patients")
   };
 
   return (
