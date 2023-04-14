@@ -16,13 +16,10 @@ import { db, auth } from "../../../firebase";
 const ITEM_WIDTH = Dimensions.get("window").width;
 const ITEM_HEIGHT = 550;
 
-
-const getPatients = async() => {
-  const docRef = collection(db, "patients");
-  const docQuery = query(docRef, where("caregiver", "==", auth.currentUser.uid ));
-  
-  const querySnapshot = await getDocs(docQuery);
-  
+const fetchPatientData = async () => {
+  const usersRef = doc(db, "patients", `${auth.currentUser.uid}`);
+  const docSnap = await getDoc(usersRef);
+  return docSnap.exists() ? docSnap.data() : null;
 };
 
 

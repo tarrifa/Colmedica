@@ -4,8 +4,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Button } from "@rneui/base";
 import { width } from "deprecated-react-native-prop-types/DeprecatedImagePropType";
-import { signOut } from "firebase/auth";
-import { auth } from "../../firebase";
+import { auth } from "../../../firebase";
+import { CommonActions } from "@react-navigation/native";
 
 const cards = [
   {
@@ -40,16 +40,21 @@ const ITEM_HEIGHT = Dimensions.get("window").height;
 const Metricas = ({ navigation }) => {
   const [loggedIn, setLogin] = useState(true);
 
-
-
-  const onSignOut = () => {
-    signOut(auth)
-      .then(() =>{
-        navigation.navigate("Login")
-      }
-      )
-      .catch((error) => console.log("Error logging out: ", error));
-  };
+  const onSignOut = async () => {
+    try {
+      await auth.signOut();
+      navigation.dispatch(
+        CommonActions.navigate({
+          name: 'NestedNavigator',
+          params: {
+            screen: 'Login',
+          },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <SafeAreaView

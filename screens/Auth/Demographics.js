@@ -4,7 +4,7 @@ import { Input, Button, Text } from "@rneui/themed";
 import { Dropdown } from "react-native-element-dropdown";
 import { Switch } from "@rneui/base";
 import { StatusBar } from "expo-status-bar";
-import { db, auth } from "../../../firebase";
+import { db, auth } from "../../firebase";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import {  doc, setDoc } from "firebase/firestore";
 
@@ -43,7 +43,10 @@ const Demographics = ({ navigation }) => {
       };
       
       setDoc(usersRef, addData, { merge: true });
+    {cuidador?
       navigation.navigate("Patients")
+:navigation.navigate("HomePage")}
+      
   };
 
   return (

@@ -2,9 +2,9 @@ import { StyleSheet} from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Metricas from '../HK/Metricas';
-import Location from '../HK/Location';
-import Schedule from '../HK/Schedule';
+import Metricas from '../Patients/Metricas';
+import Location from '../Components/Location';
+import Schedule from '../Patients/Schedule';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const homeName = "Metricas";
@@ -18,7 +18,7 @@ const Navbar = () => {
     <Tab.Navigator
       initialRouteName={detailsName}
       screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
+          tabBarIcon: ({ focused, color }) => {
               let iconName;
               let rn = route.name;
               
@@ -32,15 +32,15 @@ const Navbar = () => {
                     iconName = focused ? 'calendar' : 'calendar';
                 }
             
-                return <Ionicons name={iconName} size={size} color={color} />;
+                return <Ionicons name={iconName} size={32} color={color} />;
             },
          headerShown: false,
         tabBarShowLabel:false,
          tabBarActiveTintColor: '#5CC5BA',
          tabBarInactiveTintColor: 'grey',
-         tabBarLabelStyle: { paddingBottom: 20, fontSize: 10 },
-         tabBarStyle: {  height: 60,  borderTopLeftRadius: 20,
-            borderTopRightRadius: 20} })}
+         tabBarStyle: {  height: 72,  borderTopLeftRadius: 16,
+            borderTopRightRadius: 16, paddingTop:8} ,
+          style:{flex:1, alignItems:'center', justifyContent:'center'}})}
         >
 
       <Tab.Screen name={homeName} component={Metricas} />

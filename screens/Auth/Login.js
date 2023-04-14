@@ -19,23 +19,6 @@ const Login = ({ navigation }) => {
 
   const logoSC = require("../../assets/images/logoSC.png");
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (authUser) => {
-      const ref = await getDoc(doc(db, `users/${authUser.uid}`));
-      const careg = ref.data().caregiver;
-
-      if (careg) {
-        navigation.replace("Navbar");
-        setLogin(true);
-      } else {
-        navigation.replace("Patients");
-        setLogin(true);
-      }
-    });
-
-    return unsubscribe;
-  }, []);
-
   const signIn = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
